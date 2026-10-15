@@ -30,6 +30,17 @@ int W_hrg(const vector<tanaman>& data) {
     return width;
 }
 
+bool cek_id(const string& id) {
+    static vector<string> seen;
+    for (const string& id_seen : seen) {
+        if (id_seen == id) {
+            return false;
+        }
+    }
+    seen.push_back(id);
+    return true;
+}
+
 vector<tanaman> load_data(const string& path) {
     vector<tanaman> out;
     ifstream file(path);
@@ -53,9 +64,13 @@ vector<tanaman> load_data(const string& path) {
             getline(iss, hrg, ',') && 
             getline(iss, stk_kg, ','))
         {
+            if (cek_id(id)) {
             out.push_back({id, nama, stoi(hrg), stof(stk_kg) });
+            } else {
+                cout << "Baris ke-" << i << " ditolak karna duplikat id"<< endl;
+            }
         } else {
-            cout << "Error baris kurang lengkap pada baris ke-" << i << endl;
+            cout << "Baris ke-" << i << " ditolak karna format salah"<< endl;
         }
         i++;
     }
