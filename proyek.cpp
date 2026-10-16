@@ -68,24 +68,28 @@ vector<tanaman> load_data(const string& path, const int& stk_kg_max) {
             getline(iss, str_hrg, ',') && 
             getline(iss, str_stk_kg, ','))
         {
-            int hrg = stoi(str_hrg);
-            float stk_kg = stof(str_stk_kg);
+            int hrg;
+            float stk_kg;
+            try {
+                hrg = stoi(str_hrg);
+                stk_kg = stof(str_stk_kg);
+            } catch (...) {
+                cout << "Baris ke-" << i << " ditolak karna format angka salah" << endl;
+                x++;
+                continue;
+            }
 
-            if (cek_id(id) && hrg >= 0 && stk_kg >= 0 && stk_kg <= stk_kg_max) {
-            out.push_back({id, nama, hrg, stk_kg });
-            } else if (hrg < 0 || stk_kg < 0 || stk_kg > stk_kg_max) {
+            if (hrg < 0 || stk_kg < 0 || stk_kg > stk_kg_max) {
                 string invalid_val = (hrg < 0) ? str_hrg : str_stk_kg;
                 string invalid = (hrg < 0) ? "harga" : "stok/kg";
-                cout << "Baris ke-" << i << " " << invalid << " di luar rentang ("<< invalid_val << ")" << endl;
+                cout << "Baris ke-" << i << " " << invalid << " di luar rentang (" << invalid_val << ")" << endl;
                 x++;
-            }
-            else {
-                cout << "Baris ke-" << i << " ditolak karna duplikat id"<< endl;
+            } else if (!cek_id(id)) {
+                cout << "Baris ke-" << i << " ditolak karna duplikat id" << endl;
                 x++;
+            } else {
+                out.push_back({id, nama, hrg, stk_kg});
             }
-        } else {
-            cout << "Baris ke-" << i << " ditolak karna format salah" << endl;
-            x++;
         }
     }
     cout << "Berhasil memuat " << i-x << " dari " << i << " baris (" << x <<" ditolak)" << endl;
