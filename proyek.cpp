@@ -41,39 +41,55 @@ bool cek_id(const string& id) {
     return true;
 }
 
-vector<tanaman> load_data(const string& path) {
+vector<tanaman> load_data(const string& path, const int& stk_kg_max) {
     vector<tanaman> out;
     ifstream file(path);
     if (!file) {
-        cerr << "Tidak ada file di folder data: " << path << '\n';
+        cerr << "Tidak ada file di folder data (" << path << ')\n';
         return out;
     }
+
     string line;
-    int i = 1;
+    int i = 0;
+    int x = 0;
     while (getline(file, line)) {
         istringstream iss(line);
+        i++;
+
         if (line.empty()) {
             cout << "Baris kosong pada baris ke-" << i << endl;
             i++;
+            x++;
             continue;
         }
 
-        string id, nama, hrg, stk_kg;
+        string id, nama, str_hrg, str_stk_kg;
         if (getline(iss, id, ',') && 
             getline(iss, nama, ',') && 
-            getline(iss, hrg, ',') && 
-            getline(iss, stk_kg, ','))
+            getline(iss, str_hrg, ',') && 
+            getline(iss, str_stk_kg, ','))
         {
-            if (cek_id(id)) {
-            out.push_back({id, nama, stoi(hrg), stof(stk_kg) });
-            } else {
+            int hrg = stoi(str_hrg);
+            float stk_kg = stof(str_stk_kg);
+
+            if (cek_id(id) && hrg >= 0 && stk_kg >= 0 && stk_kg <= stk_kg_max) {
+            out.push_back({id, nama, hrg, stk_kg });
+            } else if (hrg < 0 || stk_kg < 0 || stk_kg > stk_kg_max) {
+                string invalid_val = (hrg < 0) ? str_hrg : str_stk_kg;
+                string invalid = (hrg < 0) ? "harga" : "stok/kg";
+                cout << "Baris ke-" << i << " " << invalid << " di luar rentang ("<< invalid_val << ")" << endl;
+                x++;
+            }
+            else {
                 cout << "Baris ke-" << i << " ditolak karna duplikat id"<< endl;
+                x++;
             }
         } else {
-            cout << "Baris ke-" << i << " ditolak karna format salah"<< endl;
+            cout << "Baris ke-" << i << " ditolak karna format salah" << endl;
+            x++;
         }
-        i++;
     }
+    cout << "Berhasil memuat " << i-x << " dari " << i << " baris (" << x <<" ditolak)" << endl;
     return out;
 }
 
@@ -89,7 +105,8 @@ void tampilkan_semua(const vector<tanaman>& data) {
 }
 
 int main() {
-    auto data = load_data("bibit.txt");
+    float stk_kg_max = 1000; 
+    auto data = load_data("bibit.txt", stk_kg_max);
     tampilkan_semua(data);
     return 0;
 }
