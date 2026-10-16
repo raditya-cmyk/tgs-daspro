@@ -45,7 +45,7 @@ vector<tanaman> load_data(const string& path, const int& stk_kg_max) {
     vector<tanaman> out;
     ifstream file(path);
     if (!file) {
-        cerr << "Tidak ada file di folder data (" << path << ')\n';
+        cerr << "Tidak ada file di folder data (" << path << ")\n";
         return out;
     }
 
@@ -58,7 +58,6 @@ vector<tanaman> load_data(const string& path, const int& stk_kg_max) {
 
         if (line.empty()) {
             cout << "Baris kosong pada baris ke-" << i << endl;
-            i++;
             x++;
             continue;
         }
