@@ -132,9 +132,12 @@ vector<tanaman> load_data(const string& path, const float& stk_kg_max, const int
 
 void tampilkan_semua(const vector<tanaman>& data, int& w_id,
     string& id_ktlg, string& nama_ktlg, string& hrg_ktlg, string& stk_kg_ktlg, string& judul_ktlg) {
+
     int w_nama = 1, w_hrg = 1, w_stk_kg = 1;
     width(data, w_id, w_nama, w_hrg, w_stk_kg, id_ktlg, nama_ktlg, hrg_ktlg, stk_kg_ktlg);
+
     int border = 2 + w_id + 3 + w_nama + 3 + w_hrg + 3 + w_stk_kg + 2;
+    if (judul_ktlg.length() >= border) judul_ktlg = "Biji2an tnm";
 
     cout << string(border, '=') << endl 
 
