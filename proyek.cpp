@@ -13,21 +13,27 @@ struct tanaman{
     float stk_kg;
 };
 
-int W_nama(const vector<tanaman>& data) {
-    int width = 0;
-    for (const auto& m : data) {
-        if (width < int(m.nama.length())) width = int(m.nama.length());
+int int_w(int val) {
+    if (val == 0) return 1;
+    int digit = 0;
+    while (val > 0) {
+        val /= 10;
+        digit++;
     }
-    return width;
+    return digit;
 }
 
-int W_hrg(const vector<tanaman>& data) {
-    int width = 0;
+void width(const vector<tanaman>& data, int& w_nama, int& w_hrg, int& w_stk_kg ) {
+
     for (const auto& m : data) {
-        string s_hrg = to_string(m.hrg);
-        if (width < int(s_hrg.length())) width = int(s_hrg.length());
+        int i_w_hrg = int_w(m.hrg);
+        ostringstream s_stk_kg;
+        s_stk_kg << m.stk_kg;
+
+        if (w_nama < int(m.nama.length())) w_nama = int(m.nama.length());
+        if (w_hrg < i_w_hrg) w_hrg = i_w_hrg;
+        if (w_stk_kg < int(s_stk_kg.str().length())) w_stk_kg = int(s_stk_kg.str().length());
     }
-    return width;
 }
 
 bool cek_id(const string& id) {
@@ -97,13 +103,14 @@ vector<tanaman> load_data(const string& path, const int& stk_kg_max) {
 }
 
 void tampilkan_semua(const vector<tanaman>& data) {
-    int w_hrg = W_hrg(data);
-    int w_nama = W_nama(data);
+    int w_nama = 1, w_hrg = 1, w_stk_kg = 1;
+    width(data, w_nama, w_hrg, w_stk_kg);
+
     for (const auto& m : data) {
-        cout << m.id << " | " 
+        cout << "| " << m.id << " | " 
         << left << setw(w_nama) << m.nama << " | " 
-        << left << setw(w_hrg) << m.hrg << " | " 
-        << m.stk_kg << endl;
+        << left << setw(w_hrg) << m.hrg << " | "
+        << left << setw(w_stk_kg)<< m.stk_kg << " |" << endl;
     }
 }
 
