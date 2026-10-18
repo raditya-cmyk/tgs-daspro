@@ -5,7 +5,7 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
-using namespace std;
+using namespace std; //test
 
 struct tanaman{
     string id;
