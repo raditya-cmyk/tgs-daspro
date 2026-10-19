@@ -158,7 +158,7 @@ void tampilkan_semua(const tanaman* data, int n, const string& judul) {
     int border = 60;
 
     cout << string(border, '=') << endl
-    << string((border - judul.length() - 2) / 2, ' ') << "(" << judul << ")" << endl
+    << string((border - judul.length() - 2)/2, ' ') << "(" << judul << ")" << endl
     << string(border, '=') << endl
     << "| "
     << left << setw(ID_LEN) << "ID" << " | "
@@ -281,7 +281,7 @@ void urutkan_katalog(katalog& k) {
 void ubah_hapus_bibit(katalog& k) {
     string id, input;
 
-    cout << "Ubah / hapus bibit :\n";
+    cout << "Ubah/hapus bibit :\n";
     cout << "Masukan ID (Blank to exit) : ";
     getline(cin, id);
     if (id.empty()) return;
@@ -364,7 +364,7 @@ void ubah_stok(katalog& k) {
     string id, str_delta;
     float delta;
 
-    cout << "Tambah / kurangi stok :\n";
+    cout << "Tambah/kurangi stok :\n";
     cout << "Masukan ID (Blank to exit) : ";
     getline(cin, id);
     if (id.empty()) return;
@@ -418,7 +418,7 @@ void statistik(const katalog& k) {
     << "Jumlah jenis bibit : " << k.n << endl
     << "Total stok         : " << total_stk << " KG" << endl
     << "Total nilai stok   : " << total_nilai << endl
-    << "Rata-rata harga    : " << total_hrg / k.n << endl
+    << "Rata-rata harga    : " << total_hrg/k.n << endl
     << "Harga tertinggi    : " << d[i_max_hrg].nama << " (" << d[i_max_hrg].hrg << ")" << endl
     << "Harga terendah     : " << d[i_min_hrg].nama << " (" << d[i_min_hrg].hrg << ")" << endl
     << "Stok terbanyak     : " << d[i_max_stk].nama << " (" << d[i_max_stk].stk_kg << " KG)" << endl
@@ -461,7 +461,7 @@ void command(katalog& k, bool& run) {
     string input;
 
     cout << "1. Tambah bibit baru\n" << "2. Cari bibit\n" << "3. Urutkan katalog\n"
-    << "4. Ubah / hapus bibit\n" << "5. Tambah / kurangi stok\n" << "6. Statistik\n"
+    << "4. Ubah/hapus bibit\n" << "5. Tambah/kurangi stok\n" << "6. Statistik\n"
     << "7. Info memori\n" << "8. Simpan dan keluar\n" << string(60, '=') << endl;
 
     cout << "Pilih menu (Blank to exit without save): ";
