@@ -1,35 +1,47 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
-SRC_DIR = src
-INC_DIR = include
-OBJ_DIR = build
+# Menentukan compiler C++ yang digunakan
+# -Wall: menampilkan warning saat kompilasi
+# -std=c++11: menggunakan standar C++11
+# -Iinclude: lokasi file header (.h)
+# OBJ: daftar file object
+
+CXX      = g++
+CXXFLAGS = -Wall -Wextra -pedantic -std=c++11 -Iinclude
+OBJ      = main.o bibit.o fileio.o ui.o
+
+# Target utama (linking)
+ifeq ($(OS),Windows_NT)
+TARGET = bibit.exe
+else
 TARGET = bibit
-OBJECTS = $(OBJ_DIR)/main.o $(OBJ_DIR)/bibit.o $(OBJ_DIR)/fileio.o $(OBJ_DIR)/ui.o
+endif
 
 .PHONY: all run clean
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@
+$(TARGET): $(OBJ)
+	$(CXX) $(OBJ) -o $(TARGET)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+# Aturan kompilasi file objek
+main.o: src/main.cpp include/bibit.h include/fileio.h include/ui.h
+	$(CXX) $(CXXFLAGS) -c src/main.cpp -o main.o
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp $(INC_DIR)/bibit.h $(INC_DIR)/fileio.h $(INC_DIR)/ui.h | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+bibit.o: src/bibit.cpp include/bibit.h include/ui.h
+	$(CXX) $(CXXFLAGS) -c src/bibit.cpp -o bibit.o
 
-$(OBJ_DIR)/bibit.o: $(SRC_DIR)/bibit.cpp $(INC_DIR)/bibit.h $(INC_DIR)/ui.h | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+fileio.o: src/fileio.cpp include/fileio.h include/bibit.h
+	$(CXX) $(CXXFLAGS) -c src/fileio.cpp -o fileio.o
 
-$(OBJ_DIR)/fileio.o: $(SRC_DIR)/fileio.cpp $(INC_DIR)/fileio.h $(INC_DIR)/bibit.h | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
-
-$(OBJ_DIR)/ui.o: $(SRC_DIR)/ui.cpp $(INC_DIR)/ui.h $(INC_DIR)/bibit.h $(INC_DIR)/fileio.h | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+ui.o: src/ui.cpp include/ui.h include/bibit.h include/fileio.h
+	$(CXX) $(CXXFLAGS) -c src/ui.cpp -o ui.o
 
 run: $(TARGET)
 	./$(TARGET)
 
+ifeq ($(OS),Windows_NT)
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	-del /Q /F $(OBJ) $(TARGET) 2>NUL
+else
+clean:
+	rm -f $(OBJ) $(TARGET)
+endif
