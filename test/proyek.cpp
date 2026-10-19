@@ -130,13 +130,13 @@ vector<tanaman> load_data(const string& path, const float& stk_kg_max, const int
     return out;
 }
 
-void tampilkan_semua(const vector<tanaman>& data, int& w_id,
+void tampilkan_semua(const vector<tanaman>& data, int& w_id, int& border,
     string& id_ktlg, string& nama_ktlg, string& hrg_ktlg, string& stk_kg_ktlg, string& judul_ktlg) {
 
     int w_nama = 1, w_hrg = 1, w_stk_kg = 1;
     width(data, w_id, w_nama, w_hrg, w_stk_kg, id_ktlg, nama_ktlg, hrg_ktlg, stk_kg_ktlg);
 
-    int border = 2 + w_id + 3 + w_nama + 3 + w_hrg + 3 + w_stk_kg + 2;
+    border = 2 + w_id + 3 + w_nama + 3 + w_hrg + 3 + w_stk_kg + 2;
     if (judul_ktlg.length() >= border) judul_ktlg = "Biji2an tnm";
 
     cout << string(border, '=') << endl 
@@ -163,14 +163,79 @@ void tampilkan_semua(const vector<tanaman>& data, int& w_id,
     cout << string(border, '=') << endl;
 }
 
+void tambah_bibit_baru(const vector<tanaman> data) {
+    string id, nama, str_hrg, str_stk_kg;
+    cout << "Tambah bibit baru :\n";
+    cout << "Masukan ID : ";
+    getline(cin, id);
+}
+
+void command(const vector<tanaman> data, const int& border, bool& run){
+    string input;
+
+    cout << "1. Tambah bibit baru\n" << "2. Cari bibit\n" << "3. Urutkan katalog\n" 
+    << "4. Ubah / hapus bibit\n" << "5. Tambah / kurangi stok\n" << "6. Statistik\n" 
+    << "7. Info memori\n" << "8. Simpan dan keluar\n" 
+    << string(border, '=') << endl;
+
+    cout << "Pilih menu (blank to quit): ";
+    getline(cin, input);
+
+    if (input.empty()) {
+        cout << "Keluar dari program\n";
+        run = false;
+        return;
+    }
+
+    char choice = input[0];
+
+    switch (choice) {
+        case '1':
+            tambah_bibit_baru(data);
+            break;
+        case '2':
+            cout << "Action for 2\n";
+            break;
+        case '3':
+            cout << "Action for 3\n";
+            break;
+        case '4':
+            cout << "Action for 4\n";
+            break;
+        case '5':
+            cout << "Action for 5\n";
+            break;
+        case '6':
+            cout << "Action for 6\n";
+            break;
+        case '7':
+            cout << "Action for 7\n";
+            break;
+        case '8':
+            cout << "Action for 8\n";
+            break;
+        case '9':
+            cout << "Action for 9\n";
+            break;
+        default:
+            cout << "Invalid input. Please enter 1-9 or leave blank to quit.\n";
+            break;
+    }
+}
+
 int main() {
     int w_id = 5;
     float stk_kg_max = 1000; 
+    int border;
+    bool run = true;
     string header[5] = {"ID", "Nama tanaman", "Harga/KG", "Stok/KG", "Biji-bijian tanaman"};
 
     auto data = load_data("bibit.txt", stk_kg_max, w_id);
     if (data.empty()) return 1;
 
-    tampilkan_semua(data, w_id, header[0], header[1], header[2], header[3], header[4]);
+    while(run) {
+        tampilkan_semua(data, w_id, border, header[0], header[1], header[2], header[3], header[4]);
+        command(data, border, run);
+    }
     return 0;
 }
